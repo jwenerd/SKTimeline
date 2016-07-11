@@ -150,7 +150,7 @@ class TwitterFeedItem(db.Model):
     id = db.Column(db.BigInteger, primary_key=True)
     twitter_feed_id = db.Column(db.Integer, db.ForeignKey('feed_setting_twitter.id'))
     tweet_id = db.Column( db.BigInteger )
-    tweet_retrieved = db.Column( db.DateTime(timezone=True), server_default=db.func.now() )
+    tweet_retrieved = db.Column( db.DateTime(timezone=True), default=datetime.now )
     tweet_data = db.Column( db.PickleType )
 
     def __init__(self, tweet_id, twitter_feed_id, tweet_data):
