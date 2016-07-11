@@ -36,7 +36,3 @@ import sktimeline.views
 import sktimeline.views.general
 import sktimeline.views.dashboard
 import sktimeline.views.admin
-
-
-if __name__ == "__main__":
-    app.run()

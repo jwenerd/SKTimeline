@@ -1,9 +1,10 @@
+#!/usr/bin/python
 import schedule
 import time
 from sktimeline import *
 
-
 def start_populate_new_items():
+    print 'start_populate_new_items'
     TwitterFeedSetting.start_populate_new_items()
     return
 
@@ -19,6 +20,11 @@ schedule.every(15).minutes.do(update_items)
 
 #todo: do we need to look into threading these?
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+def run_schedule():
+    print 'starting scheduler process'
+    while True:
+        schedule.run_pending()
+        time.sleep(1)
+
+if __name__ == "__main__":
+    run_schedule()
