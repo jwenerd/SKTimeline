@@ -1,6 +1,7 @@
 from sktimeline import *
 from . import login_required, page_not_found
 import json
+from wtforms import validators
 
 
 #Dashboard
@@ -28,8 +29,17 @@ def dashboard_timeline():
 
     return render_template('dashboard/timeline.html', all_feed_items=json.dumps(all_feed_items))
 
+
+def hashtag_validator(form, field):
+    if field.data[0] != '#':
+        raise validators.ValidationError('Must start with #')
+    if len(field.data.split()) > 1:
+        raise validators.ValidationError('Enter only one hashtag')
+
 TwitterForm = model_form(TwitterFeedSetting, Form, exclude=['user','status','last_updated','feed_items'], field_args = {
-   #todo add basic validation
+   'hashtag' : {
+        'validators' : [validators.Required(), hashtag_validator]
+    }
 })
 
 @app.route('/dashboard/twitter/new',methods=['GET','POST'])
