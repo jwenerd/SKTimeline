@@ -1,7 +1,7 @@
 from sktimeline import db
 from datetime import datetime
 from slackclient import SlackClient
-
+import re
 
 class SlackFeedSetting(db.Model):
     __tablename__ = 'feed_setting_slack'
@@ -20,6 +20,7 @@ class SlackFeedSetting(db.Model):
 
     feed_items = db.relationship( 'SlackFeedItem' , backref='slack_feed_items', cascade="all, delete-orphan", lazy='select')
 
+    user_data = db.Column( db.PickleType )
 
     _slack_client = False
 
@@ -147,24 +148,90 @@ class SlackFeedSetting(db.Model):
         return cls.query.filter_by(user_id=user_id).all()
 
 
+    def slack_user_info(self,user_id):
+        if not self.user_data:
+            self.user_data = {}
+
+        if user_id in self.user_data:
+            # todo: check the _time_retrieved and add and expire length time to see if we should update these records after a certain amount of time
+            return self.user_data[user_id]
+
+        user = self.slack_client.api_call('users.info', user = user_id )
+        if ('ok' in user) and user['ok']:
+            user = user['user']
+            user['_time_retrieved'] = int( datetime.now().strftime("%s") ) #  use this time later for for determining when to update
+
+            self.user_data[user_id] = user
+            db.session.commit()
+            return user
+
+        return False
+
+    def user_name(self,user_id):
+        data = self.slack_user_info(user_id)
+        if not data:
+            return False
+        return data['name']
+
+
 
 class SlackFeedItem(db.Model):
     __tablename__ = 'slack_feed_items'
     id = db.Column(db.BigInteger, primary_key=True)
     slack_feed_id = db.Column(db.Integer, db.ForeignKey('feed_setting_slack.id'))
+
     timestamp = db.Column( db.DateTime(timezone=True), default=None )
     data = db.Column( db.PickleType )
+
+    _user_data = False
+    #       I added this to one relationship quickly now to get the user data for now, but it is resulting in
+    #       very slow loading of the timeline data because it keeps sequentially loading the SleedFeedSetting model on each slack message item
+    #       I will find a way to extract this data out into seperate class so that it keeps a registry of user data and doesn't do that
+    slack_feed_setting = db.relationship("SlackFeedSetting", back_populates="feed_items", uselist=False)
 
     @property
     def ts(self):
         return self.data['ts']
 
     @property
+    def user_data(self):
+        if not self._user_data:
+            self._user_data = self.slack_feed_setting.slack_user_info( self.data['user'] )
+        return self._user_data
+
+    @property
+    def message_text(self):
+
+        text = self.data['text']
+        # escape user sequences
+        pattern = '<\@U(.*?)>'
+        result = re.match(pattern, text)
+        if (result != None):
+            full_seq = result.group(0)
+            user_str = full_seq.replace('<','').replace('>','')
+            user_id =  user_str.split('|')[0].replace('@','')
+            user_name = self.slack_feed_setting.user_name(user_id)
+            text = text.replace(full_seq, '@' + user_name)
+
+        text = text.replace('\n','<br />')
+        return text
+
+    @property
+    def message_headline(self):
+        headline = False
+        if not( 'subtype' in self.data ) and (self.data['type'] == 'message') and 'name' in self.user_data:
+            headline = 'Message from ' + self.user_data['name']
+        return headline
+
+
+    @property
     def to_json(self):
         obj = {}
         obj['data'] = self.data
+        obj['user_data'] = self.user_data
         obj['text'] = {
-            'text': self.data['text']
+            'headline': self.message_headline,
+            'text': self.message_text
         }
         obj['start_date'] = {
           'year': self.timestamp.year,
