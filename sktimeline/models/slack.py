@@ -195,7 +195,7 @@ class SlackFeedItem(db.Model):
 
     @property
     def user_data(self):
-        if not self._user_data:
+        if not self._user_data and ('user' in self.data):
             self._user_data = self.slack_feed_setting.slack_user_info( self.data['user'] )
         return self._user_data
 
@@ -228,7 +228,6 @@ class SlackFeedItem(db.Model):
     def to_json(self):
         obj = {}
         obj['data'] = self.data
-        obj['user_data'] = self.user_data
         obj['text'] = {
             'headline': self.message_headline,
             'text': self.message_text
