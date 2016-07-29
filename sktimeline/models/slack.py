@@ -160,9 +160,15 @@ class SlackFeedSetting(db.Model):
         if ('ok' in user) and user['ok']:
             user = user['user']
             user['_time_retrieved'] = int( datetime.now().strftime("%s") ) #  use this time later for for determining when to update
+            user_data_cache = self.user_data
+            user_data_cache[user_id] = user
 
-            self.user_data[user_id] = user
+            self.user_data = None
             db.session.commit()
+
+            self.user_data = user_data_cache
+            db.session.commit()
+
             return user
 
         return False
@@ -183,46 +189,19 @@ class SlackFeedItem(db.Model):
     timestamp = db.Column( db.DateTime(timezone=True), default=None )
     data = db.Column( db.PickleType )
 
-    _user_data = False
-    #       I added this to one relationship quickly now to get the user data for now, but it is resulting in
-    #       very slow loading of the timeline data because it keeps sequentially loading the SleedFeedSetting model on each slack message item
-    #       I will find a way to extract this data out into seperate class so that it keeps a registry of user data and doesn't do that
-    slack_feed_setting = db.relationship("SlackFeedSetting", back_populates="feed_items", uselist=False)
-
     @property
     def ts(self):
         return self.data['ts']
 
-    @property
-    def user_data(self):
-        if not self._user_data and ('user' in self.data):
-            self._user_data = self.slack_feed_setting.slack_user_info( self.data['user'] )
-        return self._user_data
 
-    @property
-    def message_text(self):
 
-        text = self.data['text']
-        # escape user sequences
-        pattern = '<\@U(.*?)>'
-        result = re.match(pattern, text)
-        if (result != None):
-            full_seq = result.group(0)
-            user_str = full_seq.replace('<','').replace('>','')
-            user_id =  user_str.split('|')[0].replace('@','')
-            user_name = self.slack_feed_setting.user_name(user_id)
-            text = text.replace(full_seq, '@' + user_name)
+class SlackFeedItemFormatter():
 
-        text = text.replace('\n','<br />')
-        return text
-
-    @property
-    def message_headline(self):
-        headline = False
-        if not( 'subtype' in self.data ) and (self.data['type'] == 'message') and 'name' in self.user_data:
-            headline = 'Message from ' + self.user_data['name']
-        return headline
-
+    def __init__(self, slack_feed_setting, feed_item):
+        self.slack_feed_setting = slack_feed_setting
+        self.timestamp = feed_item.timestamp
+        self.data = feed_item.data
+        self._user_data = False
 
     @property
     def to_json(self):
@@ -242,3 +221,32 @@ class SlackFeedItem(db.Model):
         }
 
         return obj
+
+    @property
+    def user_data(self):
+        if not(self._user_data) and ('user' in self.data):
+            self._user_data = self.slack_feed_setting.slack_user_info( self.data['user'] )
+        return self._user_data
+
+    @property
+    def message_text(self):
+        text = self.data['text']
+        # escape user sequences
+        pattern = '<\@U(.*?)>'
+        result = re.match(pattern, text)
+        if (result != None):
+            full_seq = result.group(0)
+            user_str = full_seq.replace('<','').replace('>','')
+            user_id =  user_str.split('|')[0].replace('@','')
+            user_name = self.slack_feed_setting.user_name(user_id)
+            text = text.replace(full_seq, '@' + user_name)
+
+        text = text.replace('\n','<br />')
+        return text
+
+    @property
+    def message_headline(self):
+        headline = False
+        if not( 'subtype' in self.data ) and (self.data['type'] == 'message') and ('name' in self.user_data):
+            headline = 'Message from ' + self.user_data['name']
+        return headline

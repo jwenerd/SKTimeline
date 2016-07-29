@@ -41,7 +41,8 @@ def dashboard_timeline():
     slack_feed_items = []
     for slack_feed_setting in current_user.slack_feed_settings:
         for item in slack_feed_setting.feed_items:
-            slack_feed_items.append( item.to_json )
+            formatter = SlackFeedItemFormatter(slack_feed_setting,item)
+            slack_feed_items.append( formatter.to_json )
 
     return render_template('dashboard/timeline.html', twitter_feed_items=json.dumps(twitter_feed_items),
                                                       github_feed_items=json.dumps(github_feed_items),
