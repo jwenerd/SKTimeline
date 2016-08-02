@@ -22,6 +22,8 @@ class SlackFeedSetting(db.Model):
 
     user_data = db.Column( db.PickleType )
 
+
+
     _slack_client = False
 
     def __init__(self):
@@ -173,11 +175,25 @@ class SlackFeedSetting(db.Model):
 
         return False
 
-    def user_name(self,user_id):
+    def user_name_from_id(self,user_id):
         data = self.slack_user_info(user_id)
         if not data:
             return False
         return data['name']
+
+    def channel_name_from_id(self, channel_id):
+        if channel_id == self.channel_id:
+            return self.channel_name
+        else:
+            # for now going to make a request to the API to get the channel name here,
+            # we should reconsider another approach here later where it can cache the channel info data, so that it does not continually
+            # repeat the same requests over and over again
+            channel_info = self.slack_client.api_call('channels.info',channel=channel_id)
+            name = ''
+            if channel_info['ok']:
+                name = channel_info['channel']['name']
+            return name
+
 
 
 
@@ -222,6 +238,36 @@ class SlackFeedItemFormatter():
 
         return obj
 
+    def _replace_user_mentions(self,text):
+        # this method replaces @ mention sequences of user names in the slack message text
+        # ( formated like :   <@U1FSC0J67> or  <@U1FSC0J67|username> ) with the actual user name
+        pattern = '(<\@(U.*?)>)'
+        results = re.findall(pattern, text)
+        if (len(results) > 0):
+            for result in results:
+                full_seq = result[0]
+                user_str = full_seq.replace('<','').replace('>','')
+                user_id =  user_str.split('|')[0].replace('@','')
+                user_name = self.slack_feed_setting.user_name_from_id(user_id)
+                text = text.replace(full_seq, '@' + user_name)
+        return text
+
+    def _replace_channel_mentions(self, text):
+        # this method replaces # channel mention sequences of user names in the slack message text
+        # ( formated like :  <#C1FSJK3UN> with the actual channel name
+        pattern = '(<\#(C.*?)>)'
+        results = re.findall(pattern, text)
+        if (len(results) > 0):
+            for result in results:
+                full_seq = result[0]
+                channel_str = full_seq.replace('<','').replace('>','')
+                channel_id =  channel_str.split('|')[0].replace('#','')
+                channel_name = self.slack_feed_setting.channel_name_from_id(channel_id)
+                text = text.replace(full_seq, '#' + channel_name)
+                print text
+
+        return text
+
     @property
     def user_data(self):
         if not(self._user_data) and ('user' in self.data):
@@ -232,15 +278,8 @@ class SlackFeedItemFormatter():
     def message_text(self):
         text = self.data['text']
         # escape user sequences
-        pattern = '(<\@(U.*?)>)'
-        results = re.findall(pattern, text)
-        if (len(results) > 0):
-            for result in results:
-                full_seq = result[0]
-                user_str = full_seq.replace('<','').replace('>','')
-                user_id =  user_str.split('|')[0].replace('@','')
-                user_name = self.slack_feed_setting.user_name(user_id)
-                text = text.replace(full_seq, '@' + user_name)
+        text = self._replace_user_mentions(text)
+        text = self._replace_channel_mentions(text)
 
         text = text.replace('\n','<br />')
         return text
