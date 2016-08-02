@@ -232,14 +232,15 @@ class SlackFeedItemFormatter():
     def message_text(self):
         text = self.data['text']
         # escape user sequences
-        pattern = '<\@U(.*?)>'
-        result = re.match(pattern, text)
-        if (result != None):
-            full_seq = result.group(0)
-            user_str = full_seq.replace('<','').replace('>','')
-            user_id =  user_str.split('|')[0].replace('@','')
-            user_name = self.slack_feed_setting.user_name(user_id)
-            text = text.replace(full_seq, '@' + user_name)
+        pattern = '(<\@(U.*?)>)'
+        results = re.findall(pattern, text)
+        if (len(results) > 0):
+            for result in results:
+                full_seq = result[0]
+                user_str = full_seq.replace('<','').replace('>','')
+                user_id =  user_str.split('|')[0].replace('@','')
+                user_name = self.slack_feed_setting.user_name(user_id)
+                text = text.replace(full_seq, '@' + user_name)
 
         text = text.replace('\n','<br />')
         return text
