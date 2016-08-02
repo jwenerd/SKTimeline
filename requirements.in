@@ -12,3 +12,4 @@ python-dateutil
 slackclient
 flask_script
 flask_migrate
+markdown

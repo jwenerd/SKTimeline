@@ -2,6 +2,9 @@ from sktimeline import db
 from datetime import datetime
 from slackclient import SlackClient
 import re
+import markdown
+
+
 
 class SlackFeedSetting(db.Model):
     __tablename__ = 'feed_setting_slack'
@@ -264,7 +267,6 @@ class SlackFeedItemFormatter():
                 channel_id =  channel_str.split('|')[0].replace('#','')
                 channel_name = self.slack_feed_setting.channel_name_from_id(channel_id)
                 text = text.replace(full_seq, '#' + channel_name)
-                print text
 
         return text
 
@@ -280,6 +282,10 @@ class SlackFeedItemFormatter():
         # escape user sequences
         text = self._replace_user_mentions(text)
         text = self._replace_channel_mentions(text)
+        text = markdown.markdown(text)
+        # todo: replace emphasis formatting with html equivaliant,
+        # slack treats _ as <em> and * as <strong> however * currently outputs <em> according to the markdown standard.
+        #  look at the markdown extenion feature to override this and output <strong> instead for text like *this*  
 
         text = text.replace('\n','<br />')
         return text
