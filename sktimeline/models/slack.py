@@ -283,9 +283,6 @@ class SlackFeedItemFormatter():
         text = self._replace_user_mentions(text)
         text = self._replace_channel_mentions(text)
         text = markdown.markdown(text, extensions=[SlackEmphasisToBold()])
-        # todo: replace emphasis formatting with html equivaliant,
-        # slack treats _ as <em> and * as <strong> however * currently outputs <em> according to the markdown standard.
-        #  look at the markdown extenion feature to override this and output <strong> instead for text like *this*
 
         text = text.replace('\n','<br />')
         return text
