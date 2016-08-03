@@ -282,10 +282,10 @@ class SlackFeedItemFormatter():
         # escape user sequences
         text = self._replace_user_mentions(text)
         text = self._replace_channel_mentions(text)
-        text = markdown.markdown(text)
+        text = markdown.markdown(text, extensions=[SlackEmphasisToBold()])
         # todo: replace emphasis formatting with html equivaliant,
         # slack treats _ as <em> and * as <strong> however * currently outputs <em> according to the markdown standard.
-        #  look at the markdown extenion feature to override this and output <strong> instead for text like *this*  
+        #  look at the markdown extenion feature to override this and output <strong> instead for text like *this*
 
         text = text.replace('\n','<br />')
         return text
@@ -296,3 +296,10 @@ class SlackFeedItemFormatter():
         if not( 'subtype' in self.data ) and (self.data['type'] == 'message') and ('name' in self.user_data):
             headline = 'Message from ' + self.user_data['name']
         return headline
+
+
+# replace the markdown behavior of text like *bold*... format as <strong> rather than <em>
+class SlackEmphasisToBold(markdown.Extension):
+    def extendMarkdown(self, md, md_globals):
+        del md.inlinePatterns['emphasis']
+        md.inlinePatterns['emphasis'] = markdown.inlinepatterns.SimpleTagPattern(markdown.inlinepatterns.EMPHASIS_RE, 'strong')
