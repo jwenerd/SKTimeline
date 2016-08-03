@@ -9,18 +9,36 @@
 {% block styles %}
 {{super()}}
 <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
+<link rel="stylesheet" href="/static/css/emoji.css">
 <script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
+<script src="/static/js/emoji.js"></script>
 {% endblock %}
 
 {% block footer_scripts %}
 <script>
 jQuery(document).ready(function(){
 
+
+
+
   var twitter_events = {{twitter_feed_items|safe}};
   var github_events = {{github_feed_items|safe}}
   var slack_events = {{slack_feed_items|safe}}
-  // todo: want to generate a template for github items and renter using _.template
-  console.log(slack_events);
+
+
+  var emoji = new EmojiConvertor();// force text output mode
+  emoji.text_mode = false;
+  emoji.include_title = true;
+  emoji.use_sheet = false
+  emoji.img_set = 'emojione';
+  emoji.img_sets.emojione.path = '/static/media/emoji-data/img-emojione-64/';
+  $.each(slack_events, function(i, value){
+    value.text.text = emoji.replace_colons( value.text.text );
+  });
+
+
+
+
 
   var div_id = 'timeline';
   var options = {
