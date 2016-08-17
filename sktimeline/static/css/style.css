@@ -97,6 +97,22 @@ body {
 }
 
 /*
+ * Example concept of stylign the timeline items based on timeline type
+ */
+div.tl-timemarker[id^="tweet"] .tl-timemarker-content-container {
+  background-color: #1a8bf0;
+  color: #fff;
+}
+div.tl-timemarker[id^="tweet"] .tl-icon-twitter,
+div.tl-timemarker[id^="tweet"] .tl-timemarker-content-container .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-],
+div.tl-timemarker.tl-timemarker-active[id^="tweet"] .tl-timemarker-content-container .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-] {
+  /* todo: convert these to SASS for easier selection. can add easier ability to hover, etc
+          easier nesting syntax with this div.tl-timemarker[id^="tweet"] parent selector
+   */
+  color: #fff;
+}
+
+/*
  * Affix and center
  */
 
