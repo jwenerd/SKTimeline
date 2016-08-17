@@ -31,7 +31,8 @@ def dashboard_timeline():
     twitter_feed_items = []
     for twitter_feed_setting in current_user.twitter_feed_settings:
         for item in twitter_feed_setting.feed_items:
-            twitter_feed_items.append( item.as_timelinejs_event() )
+            formatter = TwitterFeedItemFormatter( twitter_feed_setting, item )
+            twitter_feed_items.append( formatter.to_json )
 
     github_feed_items = []
     for github_feed_setting in current_user.github_feed_settings:

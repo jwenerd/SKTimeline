@@ -1,7 +1,7 @@
 from sktimeline import db
 from sktimeline import tweepy, tweepy_API
 from datetime import datetime
-
+import re
 
 class TwitterFeedSetting(db.Model):
     __tablename__ = 'feed_setting_twitter'
@@ -86,6 +86,8 @@ class TwitterFeedSetting(db.Model):
 
 
 
+
+
 class TwitterFeedItem(db.Model):
     __tablename__ = 'twitter_feed_items'
     id = db.Column(db.BigInteger, primary_key=True)
@@ -99,21 +101,48 @@ class TwitterFeedItem(db.Model):
         self.twitter_feed_id = twitter_feed_id
         self.tweet_data = tweet_data
 
+    @property
     def status_url(self):
         return ( 'https://twitter.com/statuses/' + str(self.tweet_id) )
 
-    def as_timelinejs_event(self):
+
+
+
+
+
+
+class TwitterFeedItemFormatter:
+    def __init__(self, twitter_feed_setting, feed_item):
+        self.twitter_feed_setting = twitter_feed_setting
+        self.feed_item = feed_item
+        self.timestamp = self.feed_item.tweet_data.created_at
+
+
+    @property
+    def unique_id(self):
+        hashtag_attr = self.twitter_feed_setting.hashtag.strip()
+        #hashtag as attribute - remove spaces and non alpha numeric chars
+        hashtag_attr = re.sub(r"[^\w\s]", '', hashtag_attr)
+        # Replace all runs of whitespace with a single dash
+        hashtag_attr = re.sub(r"\s+", '-', hashtag_attr)
+
+        return 'tweet-' + hashtag_attr + '-' + str(self.feed_item.tweet_id)
+
+    @property
+    def to_json(self):
         obj = {}
+        obj['group'] = self.twitter_feed_setting.hashtag
+        obj['unique_id'] = self.unique_id
         obj['media'] = {
-            'url': self.status_url()
+            'url': self.feed_item.status_url
+            # todo: add thumbnail here
         }
         obj['start_date'] = {
-          'year': self.tweet_data.created_at.year,
-          'month': self.tweet_data.created_at.month,
-          'day': self.tweet_data.created_at.day,
-          'hour': self.tweet_data.created_at.hour,
-          'minute':  self.tweet_data.created_at.minute,
-          'second':  self.tweet_data.created_at.second
+          'year': self.timestamp.year,
+          'month': self.timestamp.month,
+          'day': self.timestamp.day,
+          'hour': self.timestamp.hour,
+          'minute':  self.timestamp.minute,
+          'second':  self.timestamp.second
         }
-
-        return obj;
+        return obj
