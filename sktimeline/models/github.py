@@ -138,9 +138,10 @@ class GithubFeedItem(db.Model):
     def to_json(self):
         obj = {}
         obj['data'] = self.git_commit_data
+        obj['group'] = 'github'
         obj['text'] = {
             'headline': 'Commit',
-            'text': '<p>' +  self.git_commit_data['message'] + '<br><br>by ' + self.git_commit_data['committer']['name'] + ' &lt;' +self.git_commit_data['committer']['name'] + '&gt;</p>' 
+            'text': '<p>' +  self.git_commit_data['message'] + '<br><br>by ' + self.git_commit_data['committer']['name'] + ' &lt;' +self.git_commit_data['committer']['name'] + '&gt;</p>'
             # todo: above is a basic example of using html templatea in a timeilne text node,
             #           will want to see what data we want, and for ease of use use a jinja template or _.js template to make formatting this easier
         }

@@ -226,6 +226,7 @@ class SlackFeedItemFormatter():
     def to_json(self):
         obj = {}
         obj['data'] = self.data
+        obj['group'] = 'slack'
         obj['text'] = {
             'headline': self.message_headline,
             'text': self.message_text
