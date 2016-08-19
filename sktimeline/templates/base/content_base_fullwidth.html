@@ -1,3 +1,4 @@
+{# this contains the contents of content_base but without the container classes on main so that the uses the entire width of the viewport #}
 {# This simple template derives from ``base.html``. See ``base.html`` for
    more information about template inheritance. #}
 {%- extends "base/base.html" %}
@@ -22,20 +23,15 @@
     {%- endif %}
     {%- endwith %}
 
-    <main id="main" class="container clear-top">
-
-
-
+    <main id="main" class="clear-top">
     {%- block content_base -%} {%- endblock -%}
     </main> <!-- / #main -->
   </div>  <!-- / #wrap -->
 
-  {# todo: should figure out a way to include this footer text on both content base and the full width page #}
   <footer class="footer">
     <div class="container">
       <p>Developed for the <a href="http://sites.psu.edu/psudhlab">Penn State Digital Humanities Lab</a>, by <a href="https://twitter.com/onthename">@onthename</a>.</p>
     </div>
   </footer>
-
 
 {% endblock %}

@@ -67,14 +67,69 @@ body {
   padding: 10px 20px;
   font-weight: bold; }
 
-div.tl-timemarker[id^="tweet"] .tl-timemarker-content-container {
-  background-color: #1a8bf0;
-  color: #fff; }
+#timeline {
+  height: 700px;
+  height: 90vh; }
+  #timeline * {
+    text-shadow: none !important; }
 
-div.tl-timemarker[id^="tweet"] .tl-icon-twitter,
-div.tl-timemarker[id^="tweet"] .tl-timemarker-content-container .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-],
-div.tl-timemarker.tl-timemarker-active[id^="tweet"] .tl-timemarker-content-container .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-] {
-  color: #fff; }
+#timeline .tl-media .tl-media-twitter blockquote p {
+  font-size: 18px; }
+
+div.tl-slide .tl-slide-content .tl-text:before,
+div.tl-slide .tl-slide-content .tl-media-twitter:before {
+  content: '';
+  display: inline-block;
+  background-size: cover;
+  width: 64px;
+  height: 64px;
+  position: relative;
+  top: -10px; }
+
+div.tl-slide[id^="slack"] .tl-slide-content .tl-text:before {
+  background-image: url(../media/logos/slack.png); }
+
+div.tl-slide[id^="github"] .tl-slide-content .tl-text:before {
+  background-image: url(../media/logos/github.png); }
+
+div.tl-slide[id^="tweet"] .tl-slide-content .tl-media-twitter:before {
+  background-image: url(../media/logos/twitter.png); }
+
+div.tl-timemarker[id^="tweet"] .tl-timemarker-content-container {
+  background-color: #1a8bf0; }
+
+div.tl-timemarker[id^="tweet"].tl-timemarker-active .tl-timemarker-content-container {
+  background-color: #56a9f4; }
+
+div.tl-timemarker[id^="tweet"].tl-timemarker-active .tl-timemarker-content,
+div.tl-timemarker[id^="tweet"] .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-],
+div.tl-timemarker[id^="tweet"] .tl-timemarker-text h2.tl-headline,
+div.tl-timemarker[id^="tweet"] .tl-timemarker-text h2.tl-headline p {
+  color: #fff !important; }
+
+div.tl-timemarker[id^="slack"] .tl-timemarker-content-container {
+  background-color: #d9176a; }
+
+div.tl-timemarker[id^="slack"].tl-timemarker-active .tl-timemarker-content-container {
+  background-color: #eb458c; }
+
+div.tl-timemarker[id^="slack"].tl-timemarker-active .tl-timemarker-content,
+div.tl-timemarker[id^="slack"] .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-],
+div.tl-timemarker[id^="slack"] .tl-timemarker-text h2.tl-headline,
+div.tl-timemarker[id^="slack"] .tl-timemarker-text h2.tl-headline p {
+  color: #fff !important; }
+
+div.tl-timemarker[id^="github"] .tl-timemarker-content-container {
+  background-color: #333333; }
+
+div.tl-timemarker[id^="github"].tl-timemarker-active .tl-timemarker-content-container {
+  background-color: #535353; }
+
+div.tl-timemarker[id^="github"].tl-timemarker-active .tl-timemarker-content,
+div.tl-timemarker[id^="github"] .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-],
+div.tl-timemarker[id^="github"] .tl-timemarker-text h2.tl-headline,
+div.tl-timemarker[id^="github"] .tl-timemarker-text h2.tl-headline p {
+  color: #fff !important; }
 
 @media (min-width: 768px) {
   .site-wrapper-inner {

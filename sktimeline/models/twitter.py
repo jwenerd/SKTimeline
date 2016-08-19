@@ -131,7 +131,7 @@ class TwitterFeedItemFormatter:
     @property
     def to_json(self):
         obj = {}
-        obj['group'] = self.twitter_feed_setting.hashtag
+        obj['group'] = 'Twitter: ' + self.twitter_feed_setting.hashtag
         obj['unique_id'] = self.unique_id
         obj['media'] = {
             'url': self.feed_item.status_url

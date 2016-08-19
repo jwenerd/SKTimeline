@@ -221,12 +221,14 @@ class SlackFeedItemFormatter():
         self.timestamp = feed_item.timestamp
         self.data = feed_item.data
         self._user_data = False
+        self.feed_item_id = feed_item.id
 
     @property
     def to_json(self):
         obj = {}
         obj['data'] = self.data
-        obj['group'] = 'slack'
+        obj['group'] = 'Slack: ' + self.slack_feed_setting.channel_info['name']
+        obj['unique_id'] = 'slack-' + self.slack_feed_setting.channel_info['name'] + '-' + str(self.feed_item_id)
         obj['text'] = {
             'headline': self.message_headline,
             'text': self.message_text

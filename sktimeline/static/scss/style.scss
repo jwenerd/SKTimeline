@@ -88,17 +88,75 @@ body {
   font-weight: bold;
 }
 
-// Example concept of stylign the timeline items based on timeline type
-div.tl-timemarker[id^="tweet"] .tl-timemarker-content-container {
-  background-color: #1a8bf0;
-  color: #fff;
-}
-div.tl-timemarker[id^="tweet"] .tl-icon-twitter,
-div.tl-timemarker[id^="tweet"] .tl-timemarker-content-container .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-],
-div.tl-timemarker.tl-timemarker-active[id^="tweet"] .tl-timemarker-content-container .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-] {
-  color: #fff;
+// timeline styles
+
+#timeline {
+  height: 700px;
+  height: 90vh;
+
+  * {
+    text-shadow: none !important; // remove text shaddow from all the things
+  }
 }
 
+#timeline .tl-media .tl-media-twitter blockquote p {
+  font-size:18px; // slightly smaller than the default wiht is 24px;
+}
+
+@mixin timeline_marker($id, $color) {
+  &[id^="#{$id}"] {
+
+    .tl-timemarker-content-container {
+      background-color:$color;
+    }
+
+    &.tl-timemarker-active .tl-timemarker-content-container {
+      background-color: lighten($color,12.5%);
+    }
+
+    // need these ultra specfic selectors to override the css included via the timeline: compiles to div.tl-timemarker[id^="tweet"].tl-timemarker-active .tl-timemarker-content [...]
+    &.tl-timemarker-active .tl-timemarker-content,
+    .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-],
+    .tl-timemarker-text h2.tl-headline,
+    .tl-timemarker-text h2.tl-headline p {
+        color: #fff !important;
+    }
+  }
+}
+
+div.tl-slide {
+  .tl-slide-content .tl-text:before,
+  .tl-slide-content .tl-media-twitter:before {
+      content: '';
+      display:inline-block;
+      background-size:cover;
+      width: 64px;
+      height: 64px;
+      position:relative;
+      top:-10px;
+  }
+
+  &[id^="slack"] .tl-slide-content .tl-text:before {
+    background-image: url(../media/logos/slack.png);
+  }
+  &[id^="github"] .tl-slide-content .tl-text:before {
+    background-image: url(../media/logos/github.png);
+  }
+  &[id^="tweet"] .tl-slide-content .tl-media-twitter:before{
+    background-image: url(../media/logos/twitter.png);
+  }
+
+}
+
+$tweet_color: #1a8bf0;
+$slack_color: #d9176a;
+$github_color: #333333;
+
+div.tl-timemarker {
+  @include timeline_marker('tweet', $tweet_color);
+  @include timeline_marker('slack', $slack_color);
+  @include timeline_marker('github', $github_color);
+}
 
 //Affix and center
 

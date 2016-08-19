@@ -37,7 +37,8 @@ def dashboard_timeline():
     github_feed_items = []
     for github_feed_setting in current_user.github_feed_settings:
         for item in github_feed_setting.feed_items:
-            github_feed_items.append( item.to_json )
+            formatter = GithubFeedItemFormatter(github_feed_setting, item )
+            github_feed_items.append( formatter.to_json )
 
     slack_feed_items = []
     for slack_feed_setting in current_user.slack_feed_settings:

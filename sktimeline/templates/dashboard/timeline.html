@@ -1,4 +1,4 @@
-{% extends "base/content_base.html" %}
+{% extends "base/content_base_fullwidth.html" %}
 
 {% block nav_right %}
   <li><a href="/">Home</a></li>
@@ -7,56 +7,56 @@
 {% endblock %}
 
 {% block styles %}
-{{super()}}
-<link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/latest/css/timeline.css">
-<link rel="stylesheet" href="/static/css/emoji.css">
-<script src="https://cdn.knightlab.com/libs/timeline3/latest/js/timeline.js"></script>
-<script src="/static/js/emoji.js"></script>
+  {{super()}}
+  <link title="timeline-styles" rel="stylesheet" href="https://cdn.knightlab.com/libs/timeline3/3.3.16/css/timeline.css">
+  <link rel="stylesheet" href="/static/css/emoji.css">
+  <script src="https://cdn.knightlab.com/libs/timeline3/3.3.16/js/timeline.js"></script>
+  <script src="/static/js/emoji.js"></script>
 {% endblock %}
 
 {% block footer_scripts %}
 <script>
-jQuery(document).ready(function(){
+  jQuery(document).ready(function(){
+
+    var twitter_events = {{twitter_feed_items|safe}};
+    var github_events = {{github_feed_items|safe}}
+    var slack_events = {{slack_feed_items|safe}}
 
 
-
-
-  var twitter_events = {{twitter_feed_items|safe}};
-  var github_events = {{github_feed_items|safe}}
-  var slack_events = {{slack_feed_items|safe}}
-
-
-  var emoji = new EmojiConvertor();// force text output mode
-  emoji.text_mode = false;
-  emoji.include_title = true;
-  emoji.use_sheet = false
-  emoji.img_set = 'emojione';
-  emoji.img_sets.emojione.path = '/static/media/emoji-data/img-emojione-64/';
-  $.each(slack_events, function(i, value){
-    value.text.text = emoji.replace_colons( value.text.text );
-  });
+    var emoji = new EmojiConvertor();// force text output mode
+    emoji.text_mode = false;
+    emoji.include_title = true;
+    emoji.use_sheet = false
+    emoji.img_set = 'emojione';
+    emoji.img_sets.emojione.path = '/static/media/emoji-data/img-emojione-64/';
+    $.each(slack_events, function(i, value){
+      value.text.text = emoji.replace_colons( value.text.text );
+    });
 
 
 
 
 
-  var div_id = 'timeline';
-  var options = {
-    events: [].concat(twitter_events,github_events,slack_events)
-  };
+    var div_id = 'timeline';
+    var options = {
+      events: [].concat(twitter_events,github_events,slack_events)
+    };
 
-  window.timeline = new TL.Timeline(div_id, options);
-})
-</script>
+    window.timeline = new TL.Timeline(div_id, options);
+    // afterwards...
+    (function(){
+      // add classes on the rows of groups in case we want to style them differently from timeline.js default
+      $('#timeline').find('.tl-timegroup').each(function(){
+        var row = $.trim( $(this).find('.tl-timegroup-message').text() ).split(':')[0].toLowerCase();
+        $(this).addClass(row);
+      });
+
+    })();
+
+  })
+  </script>
 {% endblock %}
 
 {% block content_base %}
-
-<div class="row">
-  <div class="col-xl-12">
-    <div id="timeline" style="width: 100%; height: 600px"></div>
-
-  </div>
-
-</div>
+  <div id="timeline"></div>
 {% endblock %}
