@@ -1,0 +1,123 @@
+// Globals
+
+// Links
+a,
+a:focus,
+a:hover {
+  color: #fff;
+}
+
+// Custom default button */
+.btn-default,
+.btn-default:focus {
+  color: #333;
+  text-shadow: none; /* Prevent inheritence from `body` */
+  background-color: #fff;
+  border: 1px solid #fff;
+}
+
+// margin helpers */
+
+.margin-top-10 {
+  margin-top:10px;
+}
+
+
+// Base structure
+html,
+body {
+  height: 100%;
+  background-color: #333;
+}
+body {
+  color: #fff;
+  text-shadow: 0 1px 3px rgba(0,0,0,.5);
+}
+
+#wrap {
+  min-height: 100%;
+}
+#main {
+  overflow:auto;
+  padding-bottom:50px; /* this needs to be bigger than footer height*/
+}
+
+.footer {
+  position: relative;
+  margin-top: -50px; /* negative value of footer height */
+  height: 50px;
+  clear:both;
+  padding-top:20px;
+
+  text-align: center;
+}
+
+
+//* Model Styles */
+
+.modal-body {
+    color:black;
+    text-shadow: none; /* Prevent inheritence from `body` */
+}
+
+.modal-title {
+    color:black;
+    text-shadow: none; /* Prevent inheritence from `body` */
+}
+
+.logos {
+    height: 100px;
+    width: 100px;
+}
+
+.modalText {
+    padding: 5%;
+}
+
+//* Padding for spacing */
+.inner {
+  padding: 30px;
+}
+
+// Cover
+.cover {
+  padding: 0 20px;
+}
+.cover .btn-lg {
+  padding: 10px 20px;
+  font-weight: bold;
+}
+
+// Example concept of stylign the timeline items based on timeline type
+div.tl-timemarker[id^="tweet"] .tl-timemarker-content-container {
+  background-color: #1a8bf0;
+  color: #fff;
+}
+div.tl-timemarker[id^="tweet"] .tl-icon-twitter,
+div.tl-timemarker[id^="tweet"] .tl-timemarker-content-container .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-],
+div.tl-timemarker.tl-timemarker-active[id^="tweet"] .tl-timemarker-content-container .tl-timemarker-content .tl-timemarker-media-container [class^=tl-icon-] {
+  color: #fff;
+}
+
+
+//Affix and center
+
+@media (min-width: 768px) {
+  // Pull out the header and footer */
+  // Start the vertical centering */
+  .site-wrapper-inner {
+    vertical-align: middle;
+  }
+  // Handle the widths */
+  .cover-container {
+    width: 100%; // Must be percentage or pixels for horizontal alignment */
+  }
+}
+
+@media (min-width: 992px) {
+  .masthead,
+  .mastfoot,
+  .cover-container {
+    width: 700px;
+  }
+}
