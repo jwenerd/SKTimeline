@@ -97,10 +97,13 @@ body {
   * {
     text-shadow: none !important; // remove text shaddow from all the things
   }
-}
-
-#timeline .tl-media .tl-media-twitter blockquote p {
-  font-size:18px; // slightly smaller than the default wiht is 24px;
+  .tl-media .tl-media-twitter blockquote p {
+    font-size:18px; // slightly smaller than the default wiht is 24px;
+  }
+  .tl-timegroup .tl-timegroup-message {
+    // group name of each timeline group - darken for readability
+    color:#a6a6a6;
+  }
 }
 
 @mixin timeline_marker($id, $color) {

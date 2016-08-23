@@ -43,15 +43,7 @@
     };
 
     window.timeline = new TL.Timeline(div_id, options);
-    // afterwards...
-    (function(){
-      // add classes on the rows of groups in case we want to style them differently from timeline.js default
-      $('#timeline').find('.tl-timegroup').each(function(){
-        var row = $.trim( $(this).find('.tl-timegroup-message').text() ).split(':')[0].toLowerCase();
-        $(this).addClass(row);
-      });
 
-    })();
 
   })
   </script>

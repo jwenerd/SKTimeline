@@ -72,9 +72,10 @@ body {
   height: 90vh; }
   #timeline * {
     text-shadow: none !important; }
-
-#timeline .tl-media .tl-media-twitter blockquote p {
-  font-size: 18px; }
+  #timeline .tl-media .tl-media-twitter blockquote p {
+    font-size: 18px; }
+  #timeline .tl-timegroup .tl-timegroup-message {
+    color: #a6a6a6; }
 
 div.tl-slide .tl-slide-content .tl-text:before,
 div.tl-slide .tl-slide-content .tl-media-twitter:before {
