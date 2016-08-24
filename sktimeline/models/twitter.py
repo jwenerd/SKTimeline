@@ -116,6 +116,21 @@ class TwitterFeedItemFormatter:
         self.twitter_feed_setting = twitter_feed_setting
         self.feed_item = feed_item
         self.timestamp = self.feed_item.tweet_data.created_at
+        self._photo_media_url = None
+
+    def photo_media_url(self):
+        if self._photo_media_url is not None:
+            return self._photo_media_url
+
+        self._photo_media_url = False
+        if not 'media' in self.feed_item.tweet_data.entities:
+            return False
+
+        for e in self.feed_item.tweet_data.entities['media']:
+            if 'type' in e and e['type'] == 'photo':
+                self._photo_media_url = e['media_url']
+                break
+        return self._photo_media_url
 
 
     @property
@@ -137,6 +152,9 @@ class TwitterFeedItemFormatter:
             'url': self.feed_item.status_url
             # todo: add thumbnail here
         }
+        media_url = self.photo_media_url()
+        if media_url:
+            obj['background'] = { 'url': media_url }
         obj['start_date'] = {
           'year': self.timestamp.year,
           'month': self.timestamp.month,

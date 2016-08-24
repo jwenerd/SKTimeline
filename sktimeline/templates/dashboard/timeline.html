@@ -23,7 +23,7 @@
     var slack_events = {{slack_feed_items|safe}}
 
 
-    var emoji = new EmojiConvertor();// force text output mode
+    var emoji = new EmojiConvertor(); // force text output mode
     emoji.text_mode = false;
     emoji.include_title = true;
     emoji.use_sheet = false
@@ -39,7 +39,7 @@
 
     var div_id = 'timeline';
     var options = {
-      events: [].concat(twitter_events,github_events,slack_events)
+      events: [].concat( twitter_events, github_events, slack_events )
     };
 
     window.timeline = new TL.Timeline(div_id, options);
