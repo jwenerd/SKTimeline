@@ -43,7 +43,7 @@ def dashboard_timeline():
             feed_groups_data.pop(unique_id, None)
 
     for github_feed_setting in current_user.github_feed_settings:
-        unique_id = 'github-'+str(twitter_feed_setting.id)
+        unique_id = 'github-'+str(github_feed_setting.id)
         feed_groups_data[unique_id] = []
         for item in github_feed_setting.feed_items:
             formatter = GithubFeedItemFormatter(github_feed_setting, item )
