@@ -61,18 +61,28 @@
         }
       });
       if ( search_text ) {
-        // search_text = search_text.toLowerCase().split(/\s+/);
-        search_text = search_text.toLowerCase()
+        search_text = search_text.toLowerCase().split(/\s+/);
 
         selected_groups_data = $.map(selected_groups_data, function(data, key){
-          if ( data.type == 'twitter' ){
-            if ( data.tweet_text.toLowerCase().indexOf(search_text) != -1 ) {
-              return data;
-            }
-          } else if ( data.text.text.toLowerCase().indexOf(search_text) != -1 ){
-            return data;
-          } else if ( data.text.headline && data.text.headline.toLowerCase().indexOf(search_text) != -1 ) {
-            return data;
+          var foundTextData = false;
+          for (var i = 0; i < search_text.length; i++) {
+              var text = search_text[i];
+              if ( data.type == 'twitter' ){
+                if ( data.tweet_text.toLowerCase().indexOf(text) != -1 ) {
+                  foundTextData = data;
+                }
+              } else if ( data.text.text.toLowerCase().indexOf(text) != -1 ){
+                foundTextData = data;
+              } else if ( data.text.headline && data.text.headline.toLowerCase().indexOf(text) != -1 ) {
+                foundTextData = data;
+              }
+              if ( foundTextData ) {
+                // one of the search text strings was found - break from for loop, do not search for other strings in the array
+                break;
+              }
+          }
+          if ( foundTextData ) {
+            return foundTextData; // return of the map function,
           }
 
         });
