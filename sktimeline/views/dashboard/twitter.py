@@ -36,22 +36,16 @@ def dashboard_twitter_new(id=None):
 
     return render_template("dashboard/twitter.html", form = form)
 
-
-@app.route('/dashboard/twitter/edit/<id>',methods=['GET','POST'])
+@app.route('/dashboard/twitter/delete/<id>',methods=['POST'])
 @login_required
-def dashboard_twitter_edit(id):
+def dashboard_twitter_delete(id):
     model = TwitterFeedSetting.query.get(id)
     if not(model) or model.user_id != session['user_id']:
         return page_not_found()
 
-    form = TwitterForm(request.form, model)
+    db.session.delete(model)
+    db.session.commit()
+    db.session.close()
 
-    if request.method == 'POST' and request.form.has_key('delete'):
-        db.session.delete(model)
-        # todo: should it delete twitter statuses here?
-        db.session.commit()
-        db.session.close()
-        flash("Twitter entry deleted.")
-        return redirect(url_for("dashboard"))
-
-    return render_template("dashboard/twitter.html", form = form, edit = True)
+    flash('Twitter hashtag deleted!')
+    return redirect( url_for("dashboard") + '#twitter')

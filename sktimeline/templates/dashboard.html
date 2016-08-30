@@ -35,7 +35,11 @@
                         <tr>
                             <!-- <td>{{s.handle}}</td> -->
                             <td>{{s.hashtag}}</td>
-                            <td> <a class="btn btn-sm btn-default" href="/dashboard/twitter/edit/{{s.id}}">Edit</a> </td>
+                            <td>
+                              <form method="post" action="/dashboard/twitter/delete/{{s.id}}">
+                                <input class="btn btn-sm btn-default" type="submit" value="Delete"  />
+                              </form>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>
@@ -92,7 +96,11 @@
                             <td>{{s.username}}</td>
                             <td>{{s.project}}</td>
                             <td>{{s.branch}}</td>
-                            <td> <a class="btn btn-sm btn-default" href="/dashboard/github/edit/{{s.id}}">Edit</a> </td>
+                            <td>
+                              <form method="post" action="/dashboard/github/delete/{{s.id}}">
+                                <input class="btn btn-sm btn-default" type="submit" value="Delete"  />
+                              </form>
+                            </td>
                         </tr>
                         {% endfor %}
                     </tbody>

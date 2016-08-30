@@ -169,7 +169,7 @@ class GithubFeedItemFormatter():
     @property
     def to_json(self):
         obj = {}
-        obj['data'] = self.feed_item.git_commit_data
+        obj['type'] = 'github'
         obj['group'] = self.group()
         obj['unique_id'] = 'github-' + self.feed_item.sha
         obj['text'] = {

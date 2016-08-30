@@ -48,7 +48,6 @@ body {
   height: 50px;
   clear:both;
   padding-top:20px;
-
   text-align: center;
 }
 
@@ -89,10 +88,88 @@ body {
 }
 
 // timeline styles
+$tweet_color: #1a8bf0;
+$slack_color: #d9176a;
+$github_color: #333333;
+
+#timeline-select-container {
+  margin-bottom: 20px;
+
+  .select2 {
+    * {
+      text-shadow: none !important;
+    }
+
+    .select2-selection.select2-selection--multiple {
+      cursor: pointer;
+    }
+
+    .select2-selection__choice {
+      background-color: $github_color;
+      padding:5px 10px;
+      color: #fff;
+      span {
+        color: #fff;
+      }
+
+      &[title^=Slack] {
+        background-color: $slack_color;
+      }
+      &[title^=GitHub] {
+        background-color: $github_color;
+      }
+      &[title^=Twitter] {
+        background-color: $tweet_color;
+      }
+    }
+
+  }
+}
+.select2-container .select2-dropdown {
+  * {
+    text-shadow: none !important;
+  }
+  .select2-results__option {
+    color: #fff;
+    padding: 10px;
+
+    &[aria-selected=true] {
+      display:none;
+    }
+
+    &[data-title^=Slack] {
+      background-color: $slack_color;
+      &.select2-results__option--highlighted {
+        background-color: lighten($slack_color, 10%);
+      }
+    }
+    &[data-title^=GitHub] {
+      background-color: $github_color;
+      &.select2-results__option--highlighted {
+        background-color: lighten($github_color, 10%);
+      }
+    }
+    &[data-title^=Twitter] {
+      background-color: $tweet_color;
+      &.select2-results__option--highlighted {
+        background-color: lighten($tweet_color, 10%);
+      }
+    }
+
+  }
+}
+
+body.tl-unselecting {
+  // this is a hack to prevent the select2 dropdown from displaying when unselecting
+  // an item
+  > .select2-container--open {
+    display:none;
+  }
+}
 
 #timeline {
   height: 700px;
-  height: 90vh;
+  height: 87.5vh;
 
   * {
     text-shadow: none !important; // remove text shaddow from all the things
@@ -150,10 +227,6 @@ div.tl-slide {
   }
 
 }
-
-$tweet_color: #1a8bf0;
-$slack_color: #d9176a;
-$github_color: #333333;
 
 div.tl-timemarker {
   @include timeline_marker('tweet', $tweet_color);

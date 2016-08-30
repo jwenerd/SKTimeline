@@ -32,21 +32,16 @@ def dashboard_github_new(id=None):
 
     return render_template("dashboard/github.html", form = form)
 
-
-@app.route('/dashboard/github/edit/<id>',methods=['GET','POST'])
+@app.route('/dashboard/github/delete/<id>',methods=['POST'])
 @login_required
-def dashboard_github_edit(id):
+def dashboard_github_delete(id):
     model = GithubFeedSetting.query.get(id)
     if not(model) or model.user_id != session['user_id']:
         return page_not_found()
 
-    form = GithubForm(request.form, model)
+    db.session.delete(model)
+    db.session.commit()
+    db.session.close()
 
-    if request.method == 'POST' and request.form.has_key('delete'):
-        db.session.delete(model)
-        db.session.commit()
-        db.session.close()
-        flash("Github entry deleted.")
-        return redirect(url_for("dashboard") + '#github')
-
-    return render_template("dashboard/github.html", form = form, edit = True)
+    flash('GitHub setting deleted!')
+    return redirect( url_for("dashboard") + '#github')

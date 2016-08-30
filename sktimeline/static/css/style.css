@@ -67,9 +67,52 @@ body {
   padding: 10px 20px;
   font-weight: bold; }
 
+#timeline-select-container {
+  margin-bottom: 20px; }
+  #timeline-select-container .select2 * {
+    text-shadow: none !important; }
+  #timeline-select-container .select2 .select2-selection.select2-selection--multiple {
+    cursor: pointer; }
+  #timeline-select-container .select2 .select2-selection__choice {
+    background-color: #333333;
+    padding: 5px 10px;
+    color: #fff; }
+    #timeline-select-container .select2 .select2-selection__choice span {
+      color: #fff; }
+    #timeline-select-container .select2 .select2-selection__choice[title^=Slack] {
+      background-color: #d9176a; }
+    #timeline-select-container .select2 .select2-selection__choice[title^=GitHub] {
+      background-color: #333333; }
+    #timeline-select-container .select2 .select2-selection__choice[title^=Twitter] {
+      background-color: #1a8bf0; }
+
+.select2-container .select2-dropdown * {
+  text-shadow: none !important; }
+
+.select2-container .select2-dropdown .select2-results__option {
+  color: #fff;
+  padding: 10px; }
+  .select2-container .select2-dropdown .select2-results__option[aria-selected=true] {
+    display: none; }
+  .select2-container .select2-dropdown .select2-results__option[data-title^=Slack] {
+    background-color: #d9176a; }
+    .select2-container .select2-dropdown .select2-results__option[data-title^=Slack].select2-results__option--highlighted {
+      background-color: #ea3985; }
+  .select2-container .select2-dropdown .select2-results__option[data-title^=GitHub] {
+    background-color: #333333; }
+    .select2-container .select2-dropdown .select2-results__option[data-title^=GitHub].select2-results__option--highlighted {
+      background-color: #4d4d4d; }
+  .select2-container .select2-dropdown .select2-results__option[data-title^=Twitter] {
+    background-color: #1a8bf0; }
+    .select2-container .select2-dropdown .select2-results__option[data-title^=Twitter].select2-results__option--highlighted {
+      background-color: #4aa3f3; }
+
+body.tl-unselecting > .select2-container--open {
+  display: none; }
+
 #timeline {
   height: 700px;
-  height: 90vh; }
+  height: 87.5vh; }
   #timeline * {
     text-shadow: none !important; }
   #timeline .tl-media .tl-media-twitter blockquote p {

@@ -226,7 +226,7 @@ class SlackFeedItemFormatter():
     @property
     def to_json(self):
         obj = {}
-        obj['data'] = self.data
+        obj['type'] = 'slack'
         obj['group'] = 'Slack: ' + self.slack_feed_setting.channel_info['name']
         obj['unique_id'] = 'slack-' + self.slack_feed_setting.channel_info['name'] + '-' + str(self.feed_item_id)
         obj['text'] = {

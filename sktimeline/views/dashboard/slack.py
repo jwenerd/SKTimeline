@@ -14,7 +14,7 @@ def dashboard_slack_start_auth(id=None):
     # this kicks off the authorization flow between the app and flasks
     params = urllib.urlencode({
         'client_id': app.config['SLACK_CLIENT_ID'],
-        'scope': 'channels:read,channels:history',
+        'scope': 'channels:read,channels:history,users:read',
         'redirect_uri': url_for('slack_auth_callback', _external=True),
     })
     auth_url = "https://slack.com/oauth/authorize?%s" % params
