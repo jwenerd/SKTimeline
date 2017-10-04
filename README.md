@@ -25,7 +25,7 @@ pip install virtualenv
 _Note: If you receive an error that the command `brew` is not found, you must install [Homebrew](http://brew.sh/) first._
 
 
-Clone this repository, change directories to project working directory, then setup and activate the virtual enviroment:
+Clone this repository, change directories to project working directory, then setup and activate the virtual environment:
 
 ```
 git clone REPOSITORY_URL_GOES_HERE
@@ -34,11 +34,10 @@ virtualenv --no-site-packages .
 source bin/activate
 ```
 
-Downgrade to pip v8.1.1 and install pip-tools:
+Install pip-tools:
 _(note: this is currently needed for pip-tools as used to manage packages)_
 
 ```
-bin/pip install --upgrade pip==8.1.1
 bin/pip install pip-tools
 ```
 Install needed project packages from requirements.txt in the virtualenv via pip-sync:
@@ -64,7 +63,7 @@ brew services start mysql
 Connect to MySQL server to setup a new database for the application.
 
 ```
-mysql --user=root 
+mysql --user=root
 ```
 _Note: MySQL installs without a root password by default, if using another development setup, you may need to enter a password here or find a way to setup_
 
@@ -108,7 +107,7 @@ Now you should be able to retup the Flask application server
 bin/python run.py
 ```
 
-## Generating and Entering API Credentials 
+## Generating and Entering API Credentials
 
 In order to download the activity from GitHub, Twitter, & Slack, you must enter API credentials into `instance/config.py`.
 
@@ -119,7 +118,7 @@ In order to download the activity from GitHub, Twitter, & Slack, you must enter 
 3. Click on the tab **Keys and Access Tokens**
 4. Click **Access Level** and change to "read only" _(this is so that if these credentials were ever stolen that they cannot make changes to your account and act on your behalf)_
 5. Copy the **Consumer Key (API Key)** value and place in the `TWEEPY_CONSUMER_KEY` value of `instance/config.py`
-6. Copy **Consumer Secret (API Secret)** and place in `TWEEPY_CONSUMER_SECRET` 
+6. Copy **Consumer Secret (API Secret)** and place in `TWEEPY_CONSUMER_SECRET`
 7. Press **Generate Access Token and Token Secret**
 8. Copy **Access Token** and place in `TWEEPY_ACCESS_TOKEN_KEY`
 9. Copy **Access Token Secret** and place in `TWEEPY_ACCESS_TOKEN_SECRET`
@@ -140,9 +139,9 @@ These GitHub access tokens are used to use the [GitHub API over Basic Authentica
 3. In the **Redirect URI(s)** field you must enter the OAuth callback URIs for where this app will be hosted.
 
  For local development this will likely be `http://127.0.0.1:5000/slack_auth/callback`
-  
+
  For development on a remote web server you will need to enter `http://yourserveraddress/slack_auth/callback`
- 
+
  _Note: this can be changed and added to in the future, so if you do not know all the places this will be hosted; it is fine to leave blank for now_
 4. After submitting form, click the **OAuth and Permissions** menu item.
 5. Copy the **Client ID** value and place in the `SLACK_CLIENT_ID` value of `instance/config.py`
@@ -157,7 +156,7 @@ Once these API credentials are present, you may need to restart the web server f
 
 The code which triggers the downloading the timeline activity is seperate from the Flask application server in the file `scheduler.py `.  On a web server, we set this process to run using supervisor (more info about this in the `etc/README.md` file); however, for development it's easiest to run this file independantly via `bin/python scheduler.py`.
 
-This process is a schedule which checks for items in newly added feeds every 1 minute and items in prior updated feeds every 15 minutes.  Because this time delay may be inconvinent for testing during development, an alternative method way to trigger the feed updates is by running the Flask application shell: 
+This process is a schedule which checks for items in newly added feeds every 1 minute and items in prior updated feeds every 15 minutes.  Because this time delay may be inconvinent for testing during development, an alternative method way to trigger the feed updates is by running the Flask application shell:
 
 `bin/python shell.py` then run a specific classes' update or populate method:
 
@@ -165,7 +164,7 @@ This process is a schedule which checks for items in newly added feeds every 1 m
 TwitterFeedSetting.start_populate_new_items()
 GithubFeedSetting.start_populate_new_items()
 TwitterFeedSetting.update_items()
-SlackFeedSetting.update_items() 
+SlackFeedSetting.update_items()
 [...]
 ```
 
@@ -183,20 +182,20 @@ these should not be edited directly and instead use the SCSS files in `assets/sc
 
 #### Using gulp to compile SCSS:
 
-Install node/npm if not on your system if not already available 
+Install node/npm if not on your system if not already available
 
 ```
 brew install node
 ```
 
-Install gulp and gulp-sass run 
+Install gulp and gulp-sass run
 
 ```
 npm install gulp && npm install gulp-sass --save-dev
 ```
 
 While developing, tell gulp to watch and compile the SCSS whenever it is changed
-by running 
+by running
 
 ```
 gulp sass:watch
