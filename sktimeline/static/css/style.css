@@ -1,7 +1,95 @@
+@import url("https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,900");
+@import url("font-awesome.min.css");
+
+/* Basic */
+
+	body, input, select, textarea {
+		color: #fff;
+		font-family: 'Source Sans Pro', sans-serif;
+		font-size: 15pt;
+		font-weight: 300 !important;
+		letter-spacing: -0.025em;
+		line-height: 1.75em;
+	}
+
+	body {
+		background: #fff;
+		overflow: hidden;
+	}
+
+		body.loading * {
+			-moz-animation: none !important;
+			-webkit-animation: none !important;
+			-ms-animation: none !important;
+			animation: none !important;
+		}
+
+	a {
+		-moz-transition: border-color 0.2s ease-in-out;
+		-webkit-transition: border-color 0.2s ease-in-out;
+		-ms-transition: border-color 0.2s ease-in-out;
+		transition: border-color 0.2s ease-in-out;
+		border-bottom: dotted 1px;
+		color: inherit;
+		outline: 0;
+		text-decoration: none !important;
+	}
+
+		a:hover {
+			border-color: transparent;
+		}
+
+/* Footer */
+
+	footer {
+		background-image: -moz-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.5) 75%);
+		background-image: -webkit-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.5) 75%);
+		background-image: -ms-linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.5) 75%);
+		background-image: linear-gradient(top, rgba(0,0,0,0), rgba(0,0,0,0.5) 75%);
+		bottom: 0;
+		cursor: default;
+		height: 6em;
+		left: 0;
+		line-height: 8em;
+		position: absolute;
+		text-align: center;
+		width: 100%;
+	}
+
+/* Icon */
+
+	.icon {
+		text-decoration: none;
+		position: relative;
+	}
+
+a .icon {
+    text-decoration: none;
+}
+
+		.icon:before {
+			-moz-osx-font-smoothing: grayscale;
+			-webkit-font-smoothing: antialiased;
+			font-family: FontAwesome;
+			font-style: normal;
+			font-weight: normal;
+			text-transform: none !important;
+		}
+
+		.icon > .label {
+			display: none;
+		}
+
+a,
+a:focus,
+a:hover {
+  color: #fff;}
+
 a,
 a:focus,
 a:hover {
   color: #fff; }
+
 
 .btn-default,
 .btn-default:focus {
@@ -14,31 +102,22 @@ a:hover {
 .margin-top-10 {
   margin-top: 10px; }
 
-html,
-body {
-  height: 100%;
-  background-color: #333; }
-
-body {
-  color: #fff;
+html, body {
+  background-image: url("images/bg.jpg");
+  background-repeat: repeat;
   text-shadow: 0 1px 3px rgba(0, 0, 0, 0.5); }
 
 #wrap {
   min-height: 100%; }
 
 #main {
-  overflow: auto;
-  padding-bottom: 50px;
+    margin-top: 1%;
+    padding: 15px;
   /* this needs to be bigger than footer height*/ }
 
 .footer {
-  position: relative;
-  margin-top: -50px;
-  /* negative value of footer height */
-  height: 50px;
-  clear: both;
-  padding-top: 20px;
-  text-align: center; }
+  padding-bottom: 50px;
+  /* this needs to be bigger than footer height*/ }
 
 .modal-body {
   color: black;
@@ -50,22 +129,22 @@ body {
   text-shadow: none;
   /* Prevent inheritence from `body` */ }
 
-.logos {
-  height: 100px;
-  width: 100px; }
+  .logos {
+    height: 100px;
+    width: 100px; }
 
-.modalText {
-  padding: 5%; }
+  .modalText {
+    padding: 5%; }
 
-.inner {
-  padding: 30px; }
+  .inner {
+    padding: 30px; }
 
-.cover {
-  padding: 0 20px; }
+  .cover {
+    padding: 0 20px; }
 
-.cover .btn-lg {
-  padding: 10px 20px;
-  font-weight: bold; }
+  .cover .btn-lg {
+    padding: 10px 20px;
+    font-weight: bold; }
 
 #timeline-select-container {
   margin-bottom: 10px; }
@@ -111,8 +190,8 @@ body.tl-unselecting > .select2-container--open {
   display: none; }
 
 #timeline {
-  height: 700px;
-  height: 87.5vh; }
+  height: 100%;
+  height: 60vh; }
   #timeline * {
     text-shadow: none !important; }
   #timeline .tl-media .tl-media-twitter blockquote p {
@@ -153,6 +232,9 @@ div.tl-timemarker[id^="tweet"] .tl-timemarker-text h2.tl-headline p {
 
 div.tl-timemarker[id^="slack"] .tl-timemarker-content-container {
   background-color: #d9176a; }
+
+div.tl-timemarker[id^="slack"].tl-timemarker-active .tl-timemarker-content-container {
+  background-color: #eb458c; }
 
 div.tl-timemarker[id^="slack"].tl-timemarker-active .tl-timemarker-content-container {
   background-color: #eb458c; }

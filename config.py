@@ -1,5 +1,5 @@
 
-DEBUG=False
+DEBUG=True
 
 SQLALCHEMY_DATABASE_URI = 'mysql://user:password@localhost/dbname'
 SQLALCHEMY_TRACK_MODIFICATIONS = True

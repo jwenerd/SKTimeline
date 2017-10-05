@@ -5,6 +5,8 @@ a,
 a:focus,
 a:hover {
   color: #fff;
+
+    text-decoration: none;
 }
 
 // Custom default button */
@@ -39,7 +41,7 @@ body {
 }
 #main {
   overflow:auto;
-  padding-bottom:50px; /* this needs to be bigger than footer height*/
+  padding-bottom:20px; /* this needs to be bigger than footer height*/
 }
 
 .footer {
@@ -167,8 +169,8 @@ body.tl-unselecting {
   }
 }
 
-#timeline {
-  height: 700px;
+#timeline !important {
+  height: 1000px;
   height: 87.5vh;
 
   * {
