@@ -174,8 +174,6 @@ If a new package is needed, add it to the `requirements.in` file then run `bin/p
 
 When upgrading a code change from the repo that requires a new package to be d, run `bin/pip-sync` which will install/upgrade/uninstall everything so that the virtualenv exactly matches what's in `requirements.txt` file.
 
-
-<<<<<<< HEAD
 ##  Note about the styles custom styles in `assets/css/styles.css`
 I've setup this file to be compiled using SASS and the the grunt task runner, so
 these should not be edited directly and instead use the SCSS files in `assets/scss/`.
@@ -190,7 +188,7 @@ While developing, tell gulp to watch and compile the SCSS whenever it is changed
 by running `gulp sass:watch`
 
 Note: I recommend sending it into a background process by running `gulp sass:watch &`
-=======
+
 ###  Custom Styles in `assets/css/styles.css`
 I've setup this file to be compiled using SASS and the the grunt task runner, so
 these should not be edited directly and instead use the SCSS files in `assets/scss/`.
@@ -221,4 +219,17 @@ I also recommend sending the process into a background process which makes it a 
 ```
 gulp sass:watch &
 ```
->>>>>>> 3a83b8973959c2d6bf49021cd8efb0ead81b9395
+
+##  Handling Database Migrations
+
+#### Newly created tables:
+Newly created models declared with SQLAlchemy run the `CREATE TABLE` SQL statements by running 
+```
+bin/python migration.py setup_db
+```
+which create the new tables if they do not already exist
+
+#### Already created tables modifications:
+Column modifications are run via `bin/python migration.py db upgrade`
+
+If adding a column change, you will need to generate table change for a migration you must create a revision by running `bin/python migration.py db revision`
