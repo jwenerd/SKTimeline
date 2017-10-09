@@ -5,8 +5,6 @@ import gc
 
 from pprint import pprint
 
-
-
 from flask_wtf import Form
 from wtforms import BooleanField, TextField, IntegerField, StringField, SubmitField, TextAreaField, PasswordField, DateField, validators
 from wtforms.ext.sqlalchemy.orm import model_form
@@ -39,3 +37,4 @@ GithubAPI = pyGithub.Github(per_page=100, client_id=app.config['GITHUB_CLIENT_ID
 
 from sktimeline.models import *
 from sktimeline.views import *
+from sktimeline.scripts import *

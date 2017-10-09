@@ -1,5 +1,6 @@
 from sktimeline import db
 from sktimeline import tweepy, tweepy_API
+from sktimeline.models.feed_item_user import FeedItemUser
 from datetime import datetime
 import re
 
@@ -46,6 +47,7 @@ class TwitterFeedSetting(db.Model):
 
         for tweet in hashtag_tweets:
             feed_item = TwitterFeedItem(tweet.id, self.id, tweet)
+            feed_item.store_feed_user() # tbd: should go in constructor?
             db.session.add(feed_item)
         self.set_updated()
         db.session.commit()
@@ -95,11 +97,19 @@ class TwitterFeedItem(db.Model):
     tweet_id = db.Column( db.BigInteger )
     tweet_retrieved = db.Column( db.DateTime(timezone=True), default=datetime.now )
     tweet_data = db.Column( db.PickleType )
+    feed_user_id = db.Column( db.BigInteger )
 
     def __init__(self, tweet_id, twitter_feed_id, tweet_data):
         self.tweet_id = tweet_id
         self.twitter_feed_id = twitter_feed_id
         self.tweet_data = tweet_data
+
+    def store_feed_user(self):
+        if self.feed_user_id == None:
+            twitter_user_id = self.tweet_data.user.id
+            feed_user = FeedItemUser.get_or_create( twitter_user_id, 'twitter', self.twitter_feed_id, self.tweet_data.user)
+            self.feed_user_id = feed_user.id
+
 
     @property
     def status_url(self):
