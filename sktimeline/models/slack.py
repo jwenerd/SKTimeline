@@ -1,6 +1,7 @@
 from sktimeline import db
 from datetime import datetime
 from slackclient import SlackClient
+from sktimeline.models.feed_item_user import FeedItemUser
 import re
 import markdown
 
@@ -58,6 +59,7 @@ class SlackFeedSetting(db.Model):
                 feed_item.timestamp = datetime.utcfromtimestamp( float(message['ts']) )
                 feed_item.slack_feed_id = self.id
                 feed_item.data = message
+                feed_item.store_feed_user()
                 db.session.add(feed_item)
 
         self.set_updated()
@@ -207,10 +209,19 @@ class SlackFeedItem(db.Model):
 
     timestamp = db.Column( db.DateTime(timezone=True), default=None )
     data = db.Column( db.PickleType )
+    feed_user_id = db.Column( db.BigInteger, db.ForeignKey('feed_item_users.id') )
 
     @property
     def ts(self):
         return self.data['ts']
+
+    def store_feed_user(self):
+        if self.feed_user_id == None:
+            slack_user_id = self.data.get('user',False)
+            if slack_user_id == False:  # tbd: this is being thrown off by a bot response - figure out what to do here and in seed script
+                return
+            feed_user = FeedItemUser.get_or_create( slack_user_id, 'slack', self.slack_feed_id, False )
+            self.feed_user_id = feed_user.id
 
 
 

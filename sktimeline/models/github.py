@@ -1,6 +1,7 @@
 from sktimeline import db, GithubAPI
 from datetime import datetime
 import dateutil.parser
+from sktimeline.models.feed_item_user import FeedItemUser
 
 class GithubFeedSetting(db.Model):
     __tablename__ = 'feed_setting_github'
@@ -123,7 +124,7 @@ class GithubFeedItem(db.Model):
     # throwing these all in until decide what is best to use here :/
     git_commit_data = db.Column( db.PickleType )
     #  other potential ideas: github_commit data -   includes stuff like author data
-
+    feed_user_id = db.Column( db.BigInteger, db.ForeignKey('feed_item_users.id') )
 
     def __init__(self, github_feed_id=github_feed_id, git_commit_data=git_commit_data ):
 
@@ -134,6 +135,11 @@ class GithubFeedItem(db.Model):
         self.commit_date = dateutil.parser.parse( git_commit_data.raw_data['commit']['committer']['date'] ).replace( tzinfo=None )
         # todo: replace time may be wrong for time zones - we need a way how to treat this :/
 
+    def store_feed_user(self):
+        if self.feed_user_id == None:
+            commit_email = self.git_commit_data['author']['email'] # tbd: 128 char limit on this field - what else to do?
+            feed_user = FeedItemUser.get_or_create( commit_email, 'github', self.github_feed_id, self.git_commit_data['author'] )
+            self.feed_user_id = feed_user.id
 
 class GithubFeedItemFormatter():
 
@@ -142,7 +148,6 @@ class GithubFeedItemFormatter():
         self.feed_item = feed_item
         self.git_commit_data = feed_item.git_commit_data
         self.timestamp = self.feed_item.commit_date
-
 
     @property
     def unique_id(self):

@@ -1,0 +1,23 @@
+{% extends "base/content_base.html" %}
+
+
+{% block nav_right %}
+  <li><a href="/">Home</a></li>
+  <li class=active><a href="/dashboard/">Dashboard</a></li>
+  <li><a href="/logout/">Logout</a></li>
+{% endblock %}
+
+
+{% block content_base %}
+<h2>{{twitter_feed.hashtag}}</h2>
+{% for user in feed_users %}
+<pre>
+@{{ user.user_data.screen_name}} ({{user.user_data.name}})
+<ul>
+{% for item in user.feed_items %}
+<li>{{item.tweet_data.text}}</li>
+{% endfor %}
+</ul>
+</pre>
+{% endfor %}
+{% endblock %}

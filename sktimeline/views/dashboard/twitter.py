@@ -49,3 +49,15 @@ def dashboard_twitter_delete(id):
 
     flash('Twitter hashtag deleted!')
     return redirect( url_for("dashboard") + '#twitter')
+
+
+@app.route('/dashboard/twitter/<id>', methods=['GET'] )
+@login_required
+def dashboard_feed_show(id=None):
+    twitter_feed = TwitterFeedSetting.query.get(id)
+    if not(twitter_feed) or twitter_feed.user_id != session['user_id']:
+        return page_not_found()
+    
+    feed_users = FeedItemUser.query.filter_by(feed_type='twitter', feed_id = twitter_feed.id).all()
+
+    return render_template("dashboard/feed/show.html", feed_type = 'twitter', twitter_feed = twitter_feed, feed_users = feed_users)

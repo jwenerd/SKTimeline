@@ -97,7 +97,7 @@ class TwitterFeedItem(db.Model):
     tweet_id = db.Column( db.BigInteger )
     tweet_retrieved = db.Column( db.DateTime(timezone=True), default=datetime.now )
     tweet_data = db.Column( db.PickleType )
-    feed_user_id = db.Column( db.BigInteger )
+    feed_user_id = db.Column( db.BigInteger, db.ForeignKey('feed_item_users.id') )
 
     def __init__(self, tweet_id, twitter_feed_id, tweet_data):
         self.tweet_id = tweet_id
@@ -107,6 +107,8 @@ class TwitterFeedItem(db.Model):
     def store_feed_user(self):
         if self.feed_user_id == None:
             twitter_user_id = self.tweet_data.user.id
+            # tbd:  self.tweet_data.user is way to large making table size huge, 
+            # - let's just store like a dict of username and profile 
             feed_user = FeedItemUser.get_or_create( twitter_user_id, 'twitter', self.twitter_feed_id, self.tweet_data.user)
             self.feed_user_id = feed_user.id
 
