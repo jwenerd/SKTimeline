@@ -1,5 +1,6 @@
+# -*- coding: utf-8 -*-
 from sktimeline import db
-from sktimeline import tweepy, tweepy_API
+from sktimeline import tweepy, tweepy_API, nlp
 from sktimeline.models.feed_item_user import FeedItemUser
 from datetime import datetime
 import re
@@ -119,10 +120,6 @@ class TwitterFeedItem(db.Model):
 
 
 
-
-
-
-
 class TwitterFeedItemFormatter:
     def __init__(self, twitter_feed_setting, feed_item):
         self.twitter_feed_setting = twitter_feed_setting
@@ -178,3 +175,75 @@ class TwitterFeedItemFormatter:
           'second':  self.timestamp.second
         }
         return obj
+
+
+from HTMLParser import HTMLParser
+from collections import Counter
+
+class TwitterItemsTokenizer:
+    
+    # may be possible to add custom tokenization rule for this 
+    html_parser = HTMLParser()
+    
+
+    def __init__(self, tweets):
+        self.tweets = list( map( lambda text: self.__class__.replace_entities(text) , tweets) )
+        text = "\n".join(self.tweets) 
+        self.doc = nlp.tokenizer(text)
+        self._words = False
+        self._set = False
+
+    @classmethod
+    def replace_entities(cls, text):
+        return cls.html_parser.unescape(text)
+
+    IGNORE_LIST = ['RT',"n't",u'n’t', 'w/'] 
+
+    @classmethod
+    def include_token(cls, token):
+        if token.is_punct or token.is_space or token.like_url or token.is_digit or token.is_stop:
+            return False
+        elif token.text in cls.IGNORE_LIST:
+            return False
+        elif len(token.text) == 1:
+            # remove single chars
+            return False
+        elif re.match('^(.*@)',token.text):
+            # do not include twitter handles starting with like @handle
+            #  or dot style handle replys starting with .@handle or any chars like -@handle
+            #  may instead want to include twitter handles regularized as @handle for wordcount and seeing who in discussion
+            return False 
+        elif re.match('^(\W.*)',token.text):
+            #  remove anything that starts with a non-word char
+            #  removing things like the contraction suffixes "'re"  "'ve"  and emojis chars 
+            #  consequencely things like /overcome, /whose/ where words extracted from strings with /
+            #    like " where/when/whenever ", etc
+
+            return False
+        elif re.match('^(http.*)',token.text):
+            # some tokens relu 
+            return False
+        
+        return True
+
+    def most_common_words(self, count): 
+        # five most common tokens
+        word_freq = Counter(self.words)
+        common_words = word_freq.most_common(count)
+        return common_words
+
+    @property
+    def words(self):
+        if self._words == False:
+            self._words = [token.text for token in self.doc if self.__class__.include_token(token)]
+            self._words.sort()
+        return self._words
+
+    @property
+    # unique elements without frequency of the tokens
+    def set(self):
+        if self._set == False:
+            self._set = list(set(self.words))
+            self._set.sort()
+        return self._set
+    

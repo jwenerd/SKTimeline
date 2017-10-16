@@ -1,0 +1,61 @@
+{% extends "base/content_base.html" %}
+
+{% block nav_right %}
+  <!-- <li><a href="/">Home</a></li>
+  <li class=active><a href="/dashboard/">Dashboard</a></li>
+  <li><a href="/logout/">Logout</a></li> -->
+{% endblock %}
+
+
+{% block content_base %}
+<div id="cloud" style="background-color:#222; padding:10px 0;"></div>
+{% endblock %}
+
+{% block footer_scripts %}
+<!-- tbd: js build tool to bundle these -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/d3/3.5.17/d3.min.js"></script>
+<script src="/static/js/d3.layout.cloud.js"></script>
+<script>
+(function(){
+  var SELECTOR = '#cloud';
+  var WORDS = {{ word_counts|tojson|safe }};
+  console.log(WORDS,'Word counter');
+  WORDS = WORDS.map(function(d){ return { text: d[0], value: d[1] } });
+  var fill = d3.scale.category20();
+  var fontSize = d3.scale['log']()
+                    .range([10, 92])
+                    .domain( [ WORDS[WORDS.length - 1].value || 1, +WORDS[0].value]);
+  
+  var layout = d3.layout.cloud()
+    .size([ $(SELECTOR).width() , 700])
+    .words( WORDS )
+    .padding(4)
+    .rotate(0)
+    .font("Impact")
+    .fontSize(function(d) { return fontSize(d.value); })
+    .on("end", draw);
+
+  layout.start();
+
+  function draw(words) {
+    d3.select(SELECTOR).append("svg")
+      .attr("width", layout.size()[0])
+      .attr("height", layout.size()[1])
+    .append("g")
+      .attr("transform", "translate(" + layout.size()[0] / 2 + "," + layout.size()[1] / 2 + ")")
+    .selectAll("text")
+      .data(words)
+    .enter().append("text")
+      .style("font-size", function(d) { return fontSize(d.value) + "px"; })
+      .style("font-family", "Impact")
+      .style("fill", function(d, i) { return fill(i); })
+      .attr("text-anchor", "middle")
+      .attr("transform", function(d) {
+        return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+      })
+      .text(function(d) { return d.text; });
+  }
+
+})();
+</script>
+{% endblock %}

@@ -233,3 +233,7 @@ which create the new tables if they do not already exist
 Column modifications are run via `bin/python migration.py db upgrade`
 
 If adding a column change, you will need to generate table change for a migration you must create a revision by running `bin/python migration.py db revision`
+
+
+## Various notes (to organize later)
+After downloading spacy - run `bin/python -m spacy.en.download all` to download tokenizer

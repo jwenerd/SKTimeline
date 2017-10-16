@@ -13,3 +13,4 @@ slackclient
 flask_script
 flask_migrate
 markdown
+spacy

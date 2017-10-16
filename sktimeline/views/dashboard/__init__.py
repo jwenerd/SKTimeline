@@ -21,6 +21,18 @@ def dashboard():
                                              github_settings = github_settings)
 
 
+#Dashboard
+@app.route('/dashboard/text')
+@login_required
+def dashboard_text():
+    twitter_settings_ids = list( map( lambda feed: feed.id, TwitterFeedSetting.belonging_to_user(session['user_id']) ) )
+    twitter_feed_items = TwitterFeedItem.query.filter(TwitterFeedItem.twitter_feed_id.in_(twitter_settings_ids)).all()
+    tweets = list( map( lambda tweet: tweet.tweet_data.text, twitter_feed_items) )
+    tokens = TwitterItemsTokenizer(tweets)
+    word_counts = tokens.most_common_words(200)
+
+    return render_template("dashboard/text.html", tokens = tokens, word_counts = word_counts)
+
 
 
 @app.route('/dashboard/timeline')
@@ -29,7 +41,6 @@ def dashboard_timeline():
     current_user = User.query.get( session['user_id'] )
     feed_groups = []
     feed_groups_data = {};
-
     # these are very repetitive... find way to dry
     for twitter_feed_setting in current_user.twitter_feed_settings:
         unique_id = 'twitter-'+str(twitter_feed_setting.id)

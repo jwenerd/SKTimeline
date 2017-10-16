@@ -11,6 +11,9 @@ from wtforms.ext.sqlalchemy.orm import model_form
 from functools import wraps
 from flask import Flask, render_template, flash, request, url_for, redirect, session
 
+import spacy
+nlp = spacy.load('en') # Load English tokenizer, tagger, parser, NER and word vectors
+
 app = Flask(__name__, instance_relative_config=True)
 app.config.from_object('config')
 app.config.from_pyfile( os.path.join( os.path.dirname(__file__) , '../instance/config.py') )
