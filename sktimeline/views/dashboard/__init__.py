@@ -7,6 +7,8 @@ import twitter
 import github
 import slack
 
+from sktimeline.tokenizers import UserFeedsTokenizer
+
 
 #Dashboard
 @app.route('/dashboard/')
@@ -22,16 +24,12 @@ def dashboard():
 
 
 #Dashboard
-@app.route('/dashboard/text')
+@app.route('/dashboard/wordcloud')
 @login_required
-def dashboard_text():
-    twitter_settings_ids = list( map( lambda feed: feed.id, TwitterFeedSetting.belonging_to_user(session['user_id']) ) )
-    twitter_feed_items = TwitterFeedItem.query.filter(TwitterFeedItem.twitter_feed_id.in_(twitter_settings_ids)).all()
-    tweets = list( map( lambda tweet: tweet.tweet_data.text, twitter_feed_items) )
-    tokens = TwitterItemsTokenizer(tweets)
-    word_counts = tokens.most_common_words(200)
-
-    return render_template("dashboard/text.html", tokens = tokens, word_counts = word_counts)
+def dashboard_wordcloud():
+    tokenizer = UserFeedsTokenizer(session['user_id'])
+    word_counts = tokenizer.most_common_words(200)
+    return render_template("dashboard/wordcloud.html", word_counts = word_counts )
 
 
 

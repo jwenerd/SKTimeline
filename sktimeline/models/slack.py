@@ -1,11 +1,10 @@
+# -*- coding: utf-8 -*-
 from sktimeline import db
 from datetime import datetime
 from slackclient import SlackClient
 from sktimeline.models.feed_item_user import FeedItemUser
 import re
 import markdown
-
-
 
 class SlackFeedSetting(db.Model):
     __tablename__ = 'feed_setting_slack'
@@ -314,3 +313,8 @@ class SlackEmphasisToBold(markdown.Extension):
     def extendMarkdown(self, md, md_globals):
         del md.inlinePatterns['emphasis']
         md.inlinePatterns['emphasis'] = markdown.inlinepatterns.SimpleTagPattern(markdown.inlinepatterns.EMPHASIS_RE, 'strong')
+
+
+
+
+    

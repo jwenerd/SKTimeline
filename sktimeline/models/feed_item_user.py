@@ -1,7 +1,6 @@
 from sktimeline import db
 from datetime import datetime
 
-
 class FeedItemUser(db.Model):
     __tablename__ = 'feed_item_users'
     
