@@ -2,7 +2,7 @@
 from sktimeline import db
 from datetime import datetime
 from slackclient import SlackClient
-from sktimeline.models.feed_item_user import FeedItemUser
+
 import re
 import markdown
 
@@ -219,7 +219,9 @@ class SlackFeedItem(db.Model):
             slack_user_id = self.data.get('user',False)
             if slack_user_id == False:  # tbd: this is being thrown off by a bot response - figure out what to do here and in seed script
                 return
-            feed_user = FeedItemUser.get_or_create( slack_user_id, 'slack', self.slack_feed_id, False )
+            
+            from sktimeline.models.feed_item_user import SlackFeedItemUser # i don't understand properly but this works
+            feed_user = SlackFeedItemUser.get_or_create( slack_user_id, self.slack_feed_id )
             self.feed_user_id = feed_user.id
 
 

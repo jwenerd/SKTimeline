@@ -58,6 +58,8 @@ def dashboard_feed_show(id=None):
     if not(twitter_feed) or twitter_feed.user_id != session['user_id']:
         return page_not_found()
     
-    feed_users = FeedItemUser.query.filter_by(feed_type='twitter', feed_id = twitter_feed.id).all()
+    # example sub query - storing twitter users without the feed 
+    subquery = db.session.query(TwitterFeedItem.feed_user_id).filter_by(twitter_feed_id=twitter_feed.id)
+    feed_users = FeedItemUser.query.filter( FeedItemUser.id.in_(subquery) ).all()
 
     return render_template("dashboard/feed/show.html", feed_type = 'twitter', twitter_feed = twitter_feed, feed_users = feed_users)

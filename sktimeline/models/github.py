@@ -1,7 +1,6 @@
 from sktimeline import db, GithubAPI
 from datetime import datetime
 import dateutil.parser
-from sktimeline.models.feed_item_user import FeedItemUser
 
 class GithubFeedSetting(db.Model):
     __tablename__ = 'feed_setting_github'
@@ -137,8 +136,8 @@ class GithubFeedItem(db.Model):
 
     def store_feed_user(self):
         if self.feed_user_id == None:
-            commit_email = self.git_commit_data['author']['email'] # tbd: 128 char limit on this field - what else to do?
-            feed_user = FeedItemUser.get_or_create( commit_email, 'github', self.github_feed_id, self.git_commit_data['author'] )
+            from sktimeline.models.feed_item_user import GithubFeedItemUser
+            feed_user = GithubFeedItemUser.get_or_create( self.git_commit_data['author'] )
             self.feed_user_id = feed_user.id
 
 class GithubFeedItemFormatter():

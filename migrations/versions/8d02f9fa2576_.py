@@ -13,7 +13,6 @@ down_revision = '11d36c57880d'
 from alembic import op
 import sqlalchemy as sa
 
-
 def upgrade():
     op.add_column('github_feed_items', sa.Column('feed_user_id', sa.BigInteger, sa.ForeignKey("feed_item_users.id"),  nullable=True))
     op.add_column('slack_feed_items', sa.Column('feed_user_id', sa.BigInteger,  sa.ForeignKey("feed_item_users.id"),  nullable=True))

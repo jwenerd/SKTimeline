@@ -12,8 +12,12 @@
 <h2>{{twitter_feed.hashtag}}</h2>
 {% for user in feed_users %}
 <pre>
-@{{ user.user_data.screen_name}} ({{user.user_data.name}})
+@{{ user.display_name}} 
 <ul>
+<!-- todo: this user.feed_items is not longer specific just to a single feed, 
+  so needs a filter or where to drill down data for further processing that will be 
+  used in the visualization
+-->
 {% for item in user.feed_items %}
 <li>{{item.tweet_data.text}}</li>
 {% endfor %}

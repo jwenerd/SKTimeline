@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 from sktimeline import db
 from sktimeline import tweepy, tweepy_API, nlp
-from sktimeline.models.feed_item_user import FeedItemUser
 from datetime import datetime
 import re
 
@@ -9,14 +8,11 @@ class TwitterFeedSetting(db.Model):
     __tablename__ = 'feed_setting_twitter'
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.uid'))
-    # handle = db.Column( db.String(64) )
     hashtag = db.Column( db.String(128), default=None)
     status = db.Column( db.String(64), default=None)
     last_updated = db.Column( db.DateTime(timezone=True), default=None )
-
     feed_items = db.relationship( 'TwitterFeedItem' , backref='feed_setting_twitter', cascade="all, delete-orphan", lazy='select')
 
-    #todo: move method that starts adding hashtags here
 
     def set_updating(self):
         self.status = 'updating'
@@ -108,9 +104,8 @@ class TwitterFeedItem(db.Model):
     def store_feed_user(self):
         if self.feed_user_id == None:
             twitter_user_id = self.tweet_data.user.id
-            # tbd:  self.tweet_data.user is way to large making table size huge, 
-            # - let's just store like a dict of username and profile 
-            feed_user = FeedItemUser.get_or_create( twitter_user_id, 'twitter', self.twitter_feed_id, self.tweet_data.user)
+            from sktimeline.models.feed_item_user import TwitterFeedItemUser
+            feed_user = TwitterFeedItemUser.get_or_create( twitter_user_id, self.tweet_data.user)
             self.feed_user_id = feed_user.id
 
 
