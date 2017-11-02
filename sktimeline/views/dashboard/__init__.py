@@ -31,7 +31,10 @@ def dashboard_wordcloud():
     word_counts = tokenizer.most_common_words(200)
     return render_template("dashboard/wordcloud.html", word_counts = word_counts )
 
-
+@app.route('/dashboard/pack')
+@login_required
+def dashboard_pack():
+    return render_template("dashboard/pack.html")
 
 @app.route('/dashboard/timeline')
 @login_required

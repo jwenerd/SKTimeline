@@ -210,3 +210,26 @@ div.tl-timemarker[id^="github"] .tl-timemarker-text h2.tl-headline p {
   .mastfoot,
   .cover-container {
     width: 700px; } }
+
+#pack {
+  background-color: #fff;
+  height: 800px; }
+  #pack text {
+    font-size: 12px;
+    pointer-events: none; }
+  #pack text.parent {
+    font-size: 18px;
+    fill: #010101; }
+  #pack circle {
+    fill: #ccc;
+    stroke: #b3b3b3;
+    pointer-events: all; }
+  #pack circle.parent {
+    fill: #1f77b4;
+    fill-opacity: .1;
+    stroke: #103d5d; }
+  #pack circle.parent:hover {
+    stroke: #ff7f0e;
+    stroke-width: .5px; }
+  #pack circle.child {
+    pointer-events: none; }

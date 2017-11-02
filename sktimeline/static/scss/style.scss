@@ -277,3 +277,40 @@ div.tl-timemarker {
     width: 700px;
   }
 }
+
+#pack {
+  background-color: #fff;
+  height:800px;
+  
+  
+  text {
+    font-size: 12px;
+    pointer-events: none;
+  }
+  text.parent {
+    font-size:18px;
+    fill: #010101;
+  }
+
+  $child_circle_fill: #ccc;
+  $parent_circle_fill: #1f77b4;
+  $parent_circle_hover_outline: #ff7f0e;
+
+  circle {
+    fill: $child_circle_fill;
+    stroke: darken($child_circle_fill, 10%);
+    pointer-events: all;
+  }
+  circle.parent {
+    fill: $parent_circle_fill;
+    fill-opacity: .1;
+    stroke: darken($parent_circle_fill, 20%);
+  }
+  circle.parent:hover {
+    stroke: $parent_circle_hover_outline;
+    stroke-width: .5px;
+  }
+  circle.child {
+    pointer-events: none;
+  }
+}
