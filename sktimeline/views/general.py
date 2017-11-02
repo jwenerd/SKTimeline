@@ -6,7 +6,7 @@ from . import login_required
 #Homepage
 @app.route('/')
 def homepage():
-    return render_template("main.html")
+    return render_template("homepage.html")
 
 #Terms of Service Page
 @app.route('/tos/')

@@ -10,10 +10,13 @@
 		<meta charset="utf-8" />
 		<meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-				<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/bootstrap-theme.min.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/bootstrap-theme.min.css')}}">
+        <link rel="stylesheet" type="text/css" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,900|Syncopate">
+        <link rel="stylesheet" href="{{url_for('static', filename='css/font-awesome.min.css')}}">
+        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/homepage.css')}}">
+
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-        <link rel="stylesheet" type="text/css" href="{{url_for('static', filename='css/main.css')}}">
         <link rel="icon" href="data:;base64,=">
     </head>
 
@@ -110,9 +113,6 @@
 			window.onload = function() { document.body.className = ''; }
 			window.ontouchmove = function() { return false; }
 			window.onorientationchange = function() { document.body.scrollTop = 0; }
-            $('#myModal').on('shown.bs.modal', function () {
-                $('#myInput').focus()
-            })
 		</script>
     </body>
 </html>
