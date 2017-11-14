@@ -8,7 +8,7 @@ import github
 import slack
 
 from sktimeline.tokenizers import UserFeedsTokenizer
-
+from collections import Counter
 
 #Dashboard
 @app.route('/dashboard/')
@@ -35,6 +35,28 @@ def dashboard_wordcloud():
 @login_required
 def dashboard_pack():
     return render_template("dashboard/pack.html")
+
+@app.route('/dashboard/treemap')
+@login_required
+def dashboard_treemap():
+    twitter_settings_ids = list( map( lambda feed: feed.id, TwitterFeedSetting.belonging_to_user( session['user_id'] ) ) )
+    twitter_feed_items = TwitterFeedItem.query.filter(TwitterFeedItem.twitter_feed_id.in_(twitter_settings_ids)).all()
+    docs = list( map( lambda tweet: nlp(tweet.tweet_data.text), twitter_feed_items) )
+    docs = list( filter(lambda doc: len(doc.ents) > 0, docs) ) # filter out the docs w/ no entities
+    ents = list( map( lambda doc: doc.ents, docs) )
+    ents = [item for sublist in ents for item in sublist]
+    ents_by_label = {}
+    # group the entities by their spacy recognized entity label
+    for ent in ents:
+        if not(ent.label_ in ents_by_label):
+            ents_by_label[ent.label_] = []
+        ents_by_label[ent.label_].append(ent.text)
+
+    ent_counts = {}
+    for label, entities in ents_by_label.iteritems():
+        ent_counts[label] = Counter(entities).most_common(20)
+
+    return render_template("dashboard/tree_map.html", ents_by_label = ents_by_label, ent_counts = ent_counts)
 
 @app.route('/dashboard/timeline')
 @login_required

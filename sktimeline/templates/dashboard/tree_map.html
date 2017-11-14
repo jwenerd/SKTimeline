@@ -1,0 +1,21 @@
+{% extends "base/content_base.html" %}
+
+
+{% block content_base %}
+<div id="tree-map" style="font-size:10px;">
+    <svg height="600"></svg>
+</div>
+<form autocomplete="off">
+    <label><input type="radio" name="mode" id="sumBySize" value="sumBySize" checked="checked"> Size</label>
+    <br>
+    <label><input type="radio" name="mode" id="sumByCount" value="sumByCount"> Count</label>
+</form>
+{% endblock %}
+
+{% block footer_scripts %}
+<script>
+var ent_counts =  {{ ent_counts|tojson|safe }};
+</script>
+<script src="https://d3js.org/d3.v4.js"></script>
+<script src="/static/js/tree-map-demo.js"></script>
+{% endblock %}
