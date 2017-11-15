@@ -1,7 +1,7 @@
 // static/js/tree-map-demo.js
 "use strict";
 
-function formatEntityData(ent_counts){
+const formatEntityData = (ent_counts) => {
   var data = { name: 'entities', children: [] },
       labels = Object.keys(ent_counts);
   
@@ -9,8 +9,8 @@ function formatEntityData(ent_counts){
     var label = labels[i],
         child = { name: label, children: [] };
 
-    child['children'] = ent_counts[label].map(function(ent_datum){
-      return { name: ent_datum[0], size: ent_datum[1] };
+    child['children'] = ent_counts[label].map( (ent_datum) => { 
+      return { name: ent_datum[0], size: ent_datum[1] }; 
     });
     data['children'].push(child);
   }
@@ -25,7 +25,7 @@ function formatEntityData(ent_counts){
       height = 600,
       treedata = formatEntityData(ent_counts);
 
-  console.log(treedata);
+
   window.treedata = treedata;
   $svg.attr('width', width);
 

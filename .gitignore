@@ -18,3 +18,4 @@ pip-selfcheck.json
 #instance config as described http://exploreflask.readthedocs.io/en/latest/organizing.html
 instance/config.py
 node_modules
+npm-debug.log
